@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>场所码箭头动画-canvas</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body,
+      html {
+        width: 100vw;
+        height: 100vh;
+        background-color: #4056dd;
+        overflow-x: hidden;
+      }
+      .app {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .content {
+        position: relative;
+        width: 414px;
+        height: 736px;
+        background: url("../bg.png") no-repeat;
+        background-size: 414px 736px;
+      }
+
+      /**遮板**/
+      .canvas {
+        position: absolute;
+        display: block;
+        background-color: #fff;
+        top: 206px;
+        left: 145px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app">
+      <div class="content">
+        <!--canvas替换箭头部分-->
+        <canvas
+          id="canvas"
+          class="canvas"
+          width="140px"
+          height="140px"
+        ></canvas>
+      </div>
+    </div>
+  </body>
+  <script type="module">
+    import MoveCrycle from "./js/MoveCrycle.js";
+
+    let cavas = document.getElementById("canvas");
+    var ctx = cavas.getContext("2d");
+
+    const COLOR = "75, 167, 118";
+    const R_SMALL = 45; //内圈初始大小
+    const SIZE = 140; //画布宽高
+    const R_OUT_STEP = 0.3 * 2.5; //外圈变化系数
+    const OPA_STEP = 0.028;
+
+    let r_out = R_SMALL; //外圈半径累加值
+    let opa = 1; //外圈透明度累加值
+
+    let move = new MoveCrycle({
+      from: R_SMALL, //初始值
+      to: R_SMALL * 1.35, //最大1.35倍
+      step: 0.3, //步长
+      dingNums: [R_SMALL * 1.1, R_SMALL * 1.35], //外圈开始出现的区间内圈的1.1倍到1.35倍
+    });
+    //订阅数值变化事件，每次变化获取值渲染
+    move.on("onchange", (value, step) => {
+      //绘制内圆
+      clear(); //清空画布
+      //绘制内圈
+      drawInnerCircle(value);
+      //绘制外圈
+      drawOutCircle();
+      //文字放在最后，不然会被上面的圆属性fillStyle覆盖
+      drawText(value);
+    });
+    //再设定的区间触发事件
+    move.on("onding", (value) => {
+      r_out += R_OUT_STEP; //外圈变大
+      opa -= OPA_STEP; //外圈变大的同时透明度减小
+    });
+    //动画圈开始变大
+    move.on("onlarge", (value) => {
+      opa = 1; //开始变大，透明度为1
+      r_out = 45; //开始变大时半径回复到初始值
+    });
+    //动画圈开始变小
+    move.on("onsmall", (value) => {
+      //控制外圈光环-隐藏
+      opa = 0;
+    });
+
+    //绘制内圆
+    function drawInnerCircle(val) {
+      ctx.beginPath();
+      ctx.arc(SIZE / 2, SIZE / 2, val, 0, 2 * Math.PI);
+      ctx.fillStyle = `rgba(${COLOR}, 1)`;
+      ctx.fill();
+    }
+    //绘制外圈圆 变大的同时透明度下降
+    function drawOutCircle() {
+      ctx.beginPath();
+      ctx.arc(SIZE / 2, SIZE / 2, r_out, 0, 2 * Math.PI);
+      ctx.fillStyle = `rgba(${COLOR}, ${opa})`;
+      ctx.fill();
+    }
+    //放大字体 大小随内圈一起变化
+    function drawText(val) {
+      //font放大倍数和内圈一样
+      ctx.font = (val / R_SMALL) * 60 + "px Arial";
+      ctx.textBaseline = "center"; //设置字体底线居中
+      ctx.textAlign = "center"; //设置字体对齐方式居中
+      ctx.fillStyle = `rgba(255,255,255,1)`;
+      ctx.fillText("✔", 70, 90);
+    }
+    //循环递归函数
+    (function start() {
+      move.jump(); //开始执行
+      requestAnimationFrame(() => {
+        start();
+      });
+    })();
+    //清除画布
+    function clear() {
+      ctx.clearRect(0, 0, SIZE, SIZE);
+    }
+  </script>
+</html>

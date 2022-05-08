@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>场所码箭头动画-svg</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body,
+      html {
+        width: 100vw;
+        height: 100vh;
+        background-color: #4056dd;
+        overflow-x: hidden;
+      }
+      .app {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .content {
+        position: relative;
+        width: 414px;
+        height: 736px;
+        background: url("../bg.png") no-repeat;
+        background-size: 414px 736px;
+      }
+
+      /**遮板**/
+      .shutter {
+        position: absolute;
+        display: block;
+        width: 120px;
+        height: 120px;
+        background-color: #fff;
+        top: 206px;
+        left: 150px;
+      }
+      /**外部圆圈**/
+      .circle {
+        position: absolute;
+        /* width: 90px;
+        height: 90px; */
+        top: 197px;
+        left: 144px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app">
+      <div class="content">
+        <!--遮板把原来的箭头用白色背景遮住，自己实现箭头-->
+        <div class="shutter"></div>
+        <!--自己实现的箭头和圆-->
+        <svg
+          class="circle"
+          width="130"
+          height="130"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g>
+            <circle cx="65" cy="65" r="45" fill="#4ba776">
+              <!--设置放大缩小动画--->
+              <animate
+                attributeName="r"
+                values="45;50;65;65;50;45"
+                dur="1.4s"
+                repeatCount="indefinite"
+              />
+              <!--设置透明度变化动画--->
+              <animate
+                attributeName="opacity"
+                values="1;1;0.2;0;0;0"
+                dur="1.4s"
+                repeatCount="indefinite"
+              />
+            </circle>
+            <circle cx="65" cy="65" r="45" fill="#4ba776">
+              <animate
+                attributeName="r"
+                values="45;54;45"
+                dur="1.4s"
+                repeatCount="indefinite"
+              />
+            </circle>
+            <text font-size="63" fill="#fff" y="90" x="38">
+              ✔
+              <animate
+                attributeName="font-size"
+                values="63;69;63"
+                dur="1.4s"
+                repeatCount="indefinite"
+              />
+            </text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>场所码箭头动画demo-css</title>
+    <style>
+      :root {
+        --theme-green: #4ba776; /**主题绿色**/
+        --circle-size: 90px; /**圆圈大小 宽高一样**/
+        --box-sd-left: 5px; /**阴影偏移距离**/
+        --box-sd-width: 10px; /**阴影大小**/
+        --box-sd-color: rgba(75, 167, 118, 0.5); /**阴影颜色**/
+      }
+      /**
+  * 箭头绿色背景：#4ba776
+  * 动画最小宽高：90px
+  **/
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body,
+      html {
+        width: 100vw;
+        height: 100vh;
+        background-color: #4056dd;
+        overflow-x: hidden;
+      }
+      .app {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .content {
+        position: relative;
+        width: 414px;
+        height: 736px;
+        background: url("../bg.png") no-repeat;
+        background-size: 414px 736px;
+      }
+
+      /**遮板**/
+      .shutter {
+        position: absolute;
+        display: block;
+        width: 120px;
+        height: 120px;
+        background-color: #fff;
+        top: 206px;
+        left: 150px;
+      }
+      /**内部圆圈**/
+      .circle {
+        position: absolute;
+        z-index: 9;
+        width: var(--circle-size);
+        height: var(--circle-size);
+        top: 218px;
+        left: 165px;
+        background-color: var(--theme-green);
+        /* background-color: red; */
+        border-radius: 45px;
+        /*加入放大缩小动画  alternate：轮流播放，放大再放小  infinite：无限播放  ease-in-out：变化函数*/
+        animation: circleMove 0.7s alternate infinite ease-in-out;
+      }
+      /**内部的勾**/
+      .circle::before {
+        z-index: 2;
+        position: absolute;
+        display: block;
+        content: "✔";
+        font-size: 63px;
+        color: #fff;
+        left: 18px;
+        top: -1px;
+      }
+      /**动画时外部渐变圈*/
+      .circle::after {
+        z-index: 1;
+        position: absolute;
+        display: block;
+        content: "";
+        width: calc(var(--circle-size));
+        height: calc(var(--circle-size));
+        box-sizing: border-box;
+        border-radius: 50%;
+        /* transform: scale(1.3); */
+        background-color: #4ba776;
+        /**外圈动画 一轮时间是内圈的2倍，因为缩小时 内部圈放大0.7s+缩小0.7s=1.4s  infinite:无限重复  ease-in-out:动画曲线**/
+        animation: outCircleMove 1.4s infinite ease-in-out;
+      }
+      @media screen and (max-width: 414px) {
+        html,
+        body {
+          overflow: auto;
+          width: 375px;
+          height: 666px;
+        }
+        .content {
+          width: 375px;
+          height: 666px;
+          background-size: 375px 666px;
+        }
+        .shutter {
+          top: 188px;
+          left: 123px;
+        }
+        .circle {
+          top: 191px;
+          left: 144px;
+        }
+      }
+      /**定义放大缩小动画**/
+      @keyframes circleMove {
+        0% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(1.2);
+        }
+      }
+/**定义扩散全放大缩小动画**/
+@keyframes outCircleMove {
+  /**0%~50% 0s~ 0.7s前的时间 此时内圈放大，扩散圈等待时机出现**/
+  0% {
+    opacity: 0;
+  }
+  /**10% 此时内圈已经放大一段时间， 扩散全显示opacity设为1，倍率为1 **/
+  10% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  /**50%到100%是动画0.7s~1.4s的时间 此时内圈缩小，扩散圈变为1.3倍，但是透明度设为0**/
+  50%,
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+    </style>
+  </head>
+
+  <body>
+    <div class="app">
+      <div class="content">
+        <!--遮板把原来的箭头用白色背景遮住，自己实现箭头-->
+        <div class="shutter"></div>
+        <!--自己实现的箭头和圆-->
+        <div class="circle"></div>
+      </div>
+    </div>
+  </body>
+</html>

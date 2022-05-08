@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>场所码箭头动画-setInterval</title>
+    <style>
+      :root {
+        --theme-green: #4ba776; /**主题绿色**/
+        --circle-size: 90px; /**圆圈大小 宽高一样**/
+        --box-sd-left: 5px; /**阴影偏移距离**/
+        --box-sd-width: 10px; /**阴影大小**/
+        --box-sd-color: rgba(75, 167, 118, 0.5); /**阴影颜色**/
+      }
+      /**
+        * 箭头绿色背景：#4ba776
+        * 动画最小宽高：90px
+        **/
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body,
+      html {
+        width: 100vw;
+        height: 100vh;
+        background-color: #4056dd;
+        overflow-x: hidden;
+      }
+      .app {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .content {
+        position: relative;
+        width: 414px;
+        height: 736px;
+        background: url("../bg.png") no-repeat;
+        background-size: 414px 736px;
+      }
+
+      /**遮板**/
+      .shutter {
+        position: absolute;
+        display: block;
+        width: 120px;
+        height: 120px;
+        background-color: #fff;
+        top: 206px;
+        left: 150px;
+      }
+/**外部圆圈**/
+.circle,
+.outCircle {
+  z-index: 1;
+  position: absolute;
+  width: var(--circle-size);
+  height: var(--circle-size);
+  top: 218px;
+  left: 165px;
+  background-color: var(--theme-green);
+  /* background-color: red; */
+  border-radius: 45px;
+}
+/**内部的勾**/
+.circle::before {
+  position: absolute;
+  display: block;
+  content: "✔";
+  font-size: 63px;
+  color: #fff;
+  left: 18px;
+  top: -1px;
+}
+      /**动画时外部渐变圈*/
+      .outCircle {
+        opacity: 0;
+        z-index: 0;
+      }
+      @media screen and (max-width: 414px) {
+        html,
+        body {
+          overflow: auto;
+          width: 375px;
+          height: 666px;
+        }
+        .content {
+          width: 375px;
+          height: 666px;
+          background-size: 375px 666px;
+        }
+        .shutter {
+          top: 188px;
+          left: 123px;
+        }
+        .circle,
+        .outCircle {
+          top: 191px;
+          left: 144px;
+        }
+      }
+    </style>
+  </head>
+
+<body>
+  <div class="app">
+    <div class="content">
+      <!--遮板把原来的箭头用白色背景遮住，自己实现箭头-->
+      <div class="shutter"></div>
+      <!--自己实现的箭头和圆-->
+      <div class="circle"></div>
+      <div class="outCircle"></div>
+    </div>
+  </div>
+</body>
+<script>
+  const circle = document.querySelector(".circle");
+  const outCircle = document.querySelector(".outCircle");
+  let size_inner = 1.0; //内圈的放大倍数
+  let size_outer = 1.0; //内圈的放大倍数
+  let STEP_INNER = 0.009; //内圈的递增步值
+  let STEP_OUT = STEP_INNER + 0.009; //外圈要比内圈扩散倍速大一点
+  let opacity_out = 1; //外圈透明度
+  const OPA_STEP = 0.03;
+  const MAX_SCALE = 1.4;
+  function randerInner() {
+    //放大过程
+    if (STEP_INNER >= 0) {
+      if (size_inner <= MAX_SCALE) {
+        size_inner += STEP_INNER;
+        //控制外圈光环--start
+        if (size_inner >= 1.1) {
+          //内圈放大到1.2倍 外圈光环才出现大小一致
+          if (opacity_out === 0) {
+            opacity_out = 1;
+            size_outer = size_inner;
+          }
+          size_outer += STEP_OUT;
+          opacity_out -= OPA_STEP;
+        }
+        //控制外圈光环--end
+      } else {
+        //放大到MAX_SCALE倍了 重新缩小
+        size_inner = MAX_SCALE;
+        STEP_INNER = STEP_INNER * -1;
+
+        //控制外圈光环-隐藏
+        opacity_out = 0;
+      }
+    } else {
+      //缩小过程
+      if (size_inner > 1) {
+        size_inner += STEP_INNER;
+      } else {
+        //缩到1倍了 重新放大
+        STEP_INNER = STEP_INNER * -1;
+        size_inner = 1;
+      }
+    }
+    circle.style.transform = `scale(${size_inner})`; //设这内圈放大样式
+    outCircle.style.transform = `scale(${size_outer})`; //设这内圈放大样式
+    outCircle.style.opacity = opacity_out; //设这内圈透明度
+  }
+  /***
+    * 测试setTimeout事件受影响程度
+    * 发现加入后非常卡顿
+    */
+  function _test() {
+    for (let index = 0; index < 2500; index++) {
+      setTimeout(() => {
+        const div = document.querySelector("div");
+        let a = div.clientWidth + div.clientLeft + div.clientTop;
+        a = div.clientWidth + div.clientLeft + div.clientTop;
+        a = div.clientWidth + div.clientLeft + div.clientTop;
+        a = div.clientWidth + div.clientLeft + div.clientTop;
+      }, 0);
+    }
+  }
+  setInterval(() => {
+    randerInner();
+    // _test();
+  }, 17);
+</script>
+</html>
