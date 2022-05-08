@@ -1,37 +1,21 @@
-## Welcome to GitHub Pages
+> 欢迎访问【场所码箭头动画】demo页
 
-You can use the [editor on GitHub](https://github.com/zyh18108121391/placearrow/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+![gif.gif](https://pic4.zhimg.com/v2-37a51883bb1c97aa2098f2e13741df9f.gif)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+这里你可以学习到简单的动画处理，如何仿`成都天府健康通场所码绿色的箭头动画`，通过这个简单的动画，让你学习`css3动画`、`jsDom如何实现动画`、`svg如何绘制动画`、`canvas如何绘制动画`
 
-### Markdown
+## 如何使用：
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-```markdown
-Syntax highlighted code block
+`git clone https://github.com/zyh18108121391/placearrow.git`
 
-# Header 1
-## Header 2
-### Header 3
+然后开启一个静态服务即可访问
 
-- Bulleted
-- List
+> 例如`vsCode`的`live server`、`nginx`。
 
-1. Numbered
-2. List
+打开demo页自己修改代码学习学习吧。
 
-**Bold** and _Italic_ and `Code` text
+###### 联系我一起学习交流[我的掘金主页](https://juejin.cn/user/4442498376415246)、[知乎](https://www.zhihu.com/people/asmallwhitecat)
 
-[Link](url) and ![Image](src)
-```
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/zyh18108121391/placearrow/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
